@@ -1,0 +1,17 @@
+# calculate IQR for each feature in X_train
+q1 = X_train.quantile(0.25)
+q3 = X_train.quantile(0.75)
+iqr = q3 - q1
+
+# define the threshold for outlier detection
+threshold = 3
+
+# create a boolean mask for each feature indicating whether a value is an outlier
+outlier_mask = ((X_train < (q1 - threshold*iqr)) | (X_train > (q3 + threshold*iqr))).any(axis=1)
+
+# print the number of outliers detected for each feature
+print("Number of outliers per feature:\n", outlier_mask.sum())
+
+# remove the outliers from X_train
+X_train = X_train[~outlier_mask]
+y_train = y_train[~outlier_mask]
